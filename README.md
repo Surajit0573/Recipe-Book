@@ -7,7 +7,6 @@ Recipe Finder is a responsive web application built using React, JavaScript, CSS
 - Responsive Design
 - Ingredient Search
 - Detailed Recipe View
-- Favorite Recipes
 
 ## Technologies Used
 
