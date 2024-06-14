@@ -1,0 +1,23 @@
+.oneContainer{
+     margin: 2rem;
+     padding: 1rem;
+     background-color:#003031;
+     border-radius: 10px;
+     box-shadow: rgb(0, 0, 0) 2px 2px 2px 2px;
+}
+
+.oneContainer img{
+    max-height: 400px;
+    border-radius: 20%;
+}
+.intro{
+    display: flex;
+    justify-content: space-around;
+
+}
+
+@media(max-width:800px){
+    .intro{
+        flex-direction: column;
+    }
+}

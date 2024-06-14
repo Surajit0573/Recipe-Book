@@ -1,0 +1,12 @@
+.card img{
+    max-height:200px;
+    border-radius:10px;
+}
+.card {
+    max-width: 200px;
+    border-radius: 10px;
+    background-color:#003031;
+    margin: 1rem;
+    padding: 0.6rem;
+
+}
