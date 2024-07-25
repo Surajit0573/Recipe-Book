@@ -1,23 +1,28 @@
 import { NavLink,useNavigate } from 'react-router-dom';
 import '../Styles/RecipeFinder.css';
-import { useState} from 'react';
-import useApi from '../useApi';
+import { useState,useContext, useEffect} from 'react';
+import { AppContext } from "../AppContext";
+// import useApi from '../useApi';
 export default function RecipeFinder() {
     const [head,setHead]=useState("Recipe Of The Day");
     const [value, setValue] = useState("");
     const [text, setText] = useState("");
-    const { data, getData } = useApi({ text, value });
+    const { getData } = useContext(AppContext);
+    const navigate=useNavigate();
     async function searchRandomRecipe() {
         setHead("");
         setText("");
         setValue("");
-          getData(text,value);
+        const data = await getData(text,value);
+        navigate('/random',{state:data})
     }
 
     async function performSearch(){
         setHead("");
-      getData(text, value);
+        const data = await getData(text,value);
+        navigate('/recipes',{state:data})
     }
+
     
     return(
         <div className="container">

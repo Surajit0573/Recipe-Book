@@ -1,17 +1,17 @@
-import { MagnifyingGlass } from "react-loader-spinner";
-
+import { MutatingDots } from "react-loader-spinner";
 export default function Loader() {
     return (
         <div className="flex justify-center">
-            <MagnifyingGlass
+            <MutatingDots
                 visible={true}
-                height="80"
-                width="80"
-                ariaLabel="magnifying-glass-loading"
+                height="100"
+                width="100"
+                color="#4fa94d"
+                secondaryColor="#4fa94d"
+                radius="12.5"
+                ariaLabel="mutating-dots-loading"
                 wrapperStyle={{}}
-                wrapperClass="magnifying-glass-wrapper"
-                glassColor="#c0efff"
-                color="#e15b64"
+                wrapperClass=""
             />
         </div>
     );

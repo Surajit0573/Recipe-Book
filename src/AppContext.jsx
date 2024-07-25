@@ -3,6 +3,25 @@ import axios from 'axios';
 export const AppContext = createContext();
 
 export default function AppContextProvider({ children }) {
+
+    async function getData(text,value){
+        let Url = 'https://www.themealdb.com/api/json/v1/1/';
+        if (value && value.length > 0) {
+            if (value == "name") {
+                Url = Url + `search.php?s=${text}`;
+            } else {
+                Url = Url + `filter.php?${value}=${text}`;
+            }
+        } else {
+            Url = Url + `random.php`;
+        }
+        console.log(Url);
+        const response = await fetch(Url);
+        return await response.json();
+    }
+
+
+
     async function isLoggedin() {
         const response = await fetch('http://localhost:3000/api/user/', {
             method: 'GET',
@@ -67,7 +86,7 @@ export default function AppContextProvider({ children }) {
         }
     }
 
-    const value = { getUrl, deleteFile, isLoggedin };
+    const value = { getUrl, deleteFile, isLoggedin,getData };
     return (
         <AppContext.Provider value={value}>
             {children}

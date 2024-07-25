@@ -1,13 +1,17 @@
 import { useLocation } from "react-router-dom";
 import OneRecipe from "./OneRecipe.jsx";
 import RecipeFinder from './RecipeFinder.jsx';
+import { useEffect, useState } from "react";
 export default function Random() {
+    const [data,setData]=useState(null);
     const location = useLocation();
-    const data=location.state;
+   useEffect(()=>{
+    setData(location.state);
+   },[location.state])
     return (
         <>
         <RecipeFinder/>
-        <OneRecipe data={data.meals[0]}/>
+        {data&&<OneRecipe data={data.meals[0]}/>}
         </>
     )
 }

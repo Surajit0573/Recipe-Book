@@ -5,6 +5,9 @@
 .h2{
   @apply text-xl mx-2 font-semibold 
 }
+.active{
+  color: #535bf2;
+}
 :root {
   padding: 0;
   margin: 0;

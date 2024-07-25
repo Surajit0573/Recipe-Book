@@ -39,11 +39,11 @@ export default function Navbar(){
     return(<>
         <nav className="flex items-center justify-between w-full h-16 bg-[#003031] mb-4 px-4">
         <div className="flex items-center">
-        <img src={logo} className="w-16 h-16 mx-auto my-4"/>
-        <p className="h2">RecipeFinder</p>
-        <p className="h2" >My Recipes</p>
-        <p className="h2">Browse Ingredients</p>
-        <p className="h2">Browse Country</p>
+        <NavLink to={'/'} className="text-white"><img src={logo} className="w-16 h-16 mx-auto my-4"/></NavLink>
+        <NavLink to={'/'} className="text-white"><p className="h2">RecipeFinder</p></NavLink>
+        <NavLink to={'/myrecipes'} className="text-white"><p className="h2" >My Recipes</p></NavLink>
+        <NavLink to={'/ingredient'} className="text-white"><p className="h2">Browse Ingredients</p></NavLink>
+        <NavLink to={'/country'} className="text-white"><p className="h2">Browse Country</p></NavLink>
         </div>
         <div className='flex items-center'>
              <i className="fa-solid fa-heart text-red-600 text-2xl"></i>

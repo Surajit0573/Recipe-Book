@@ -1,12 +1,13 @@
+import { useEffect } from 'react';
 import '../Styles/Card.css';
 import { useNavigate } from 'react-router-dom';
 export default function Card({ data }) {
     const navigate = useNavigate();
-    async function open() {
+    const open =async ()=>{
         const response = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${data.strMeal}`);
-        const data2 = await response.json();
-        if (data2) {
-            navigate('/random', { state: data2 });
+        const result = await response.json();
+        if (result) {
+            navigate('/random', { state: result });
         }
     }
 

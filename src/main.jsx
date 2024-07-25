@@ -6,6 +6,7 @@ import { BrowserRouter } from 'react-router-dom'
 import AppContextProvider from './AppContext.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
+  
   <AppContextProvider>
   <BrowserRouter>
     <App />
