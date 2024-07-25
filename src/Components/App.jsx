@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import './App.css'
-import RecipeFinder from './RecipeFinder';
+import '../Styles/App.css'
+import RecipeFinder from './RecipeFinder.jsx';
 import { Route,Routes } from 'react-router-dom';
 import Recipes from './Recipes.jsx';
-import Random from './Random';
+import Random from './Random.jsx';
 function App() {
   return (
     <>

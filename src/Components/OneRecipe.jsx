@@ -1,4 +1,4 @@
-import './OneRecipe.css'
+import '../Styles/OneRecipe.css'
 export default function OneRecipe({ data }) {
 
     function getIngredientsList(data) {

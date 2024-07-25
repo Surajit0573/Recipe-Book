@@ -1,6 +1,6 @@
 import { useLocation } from "react-router-dom";
 import Card from './Card.jsx';
-import './Recipes.css';
+import '../Styles/Recipes.css';
 export default function Recipes() {
     const location = useLocation();
     const data=location.state;
