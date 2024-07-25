@@ -21,7 +21,6 @@ export default function RecipeFinder() {
     
     return(
         <div className="container">
-        <button className='w-fit fixed top-2 right-2'>Login</button>
         <h1>Welcome to Recipe Finder</h1>
         <div className="search-container">
             <input type="text" id="searchInput" placeholder="Search..." onChange={(event)=>{setText(event.target.value)}}/>
