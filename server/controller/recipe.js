@@ -2,6 +2,34 @@ const User = require("../models/user.js");
 const Recipe = require("../models/recipe.js");
 const { redirect } = require("react-router-dom");
 
+module.exports.deleteRecipe=async (req,res)=>{
+    const recipe_id = req.params.id;
+    const { id } = res.payload;
+    try {
+        const user = await User.findById(id);
+        if (!user) {
+            console.error("User not found");
+            return res.status(404).json({ ok: false, message: "User not found", redirect: '/login' });
+        }
+        if(!user.myRecipes.includes(recipe_id)){
+            console.error("User does not own this recipe");
+            return res.status(403).json({ ok: false, message: "You are not authorized to delete this recipe" });
+        }
+        user.myRecipes = user.myRecipes.filter(item => item!== recipe_id);
+        user.fevRecipes = user.fevRecipes.filter(item => item!== recipe_id);
+        await user.save();
+        const recipe = await Recipe.findByIdAndDelete(recipe_id);
+
+        if (!recipe) {
+            console.error("Recipe not found");
+            return res.status(404).json({ ok: false, message: "Recipe not found", redirect: '/' });
+        }
+        return res.status(201).json({ ok: true, message: "Recipe deleted successfully", data: null });
+    } catch (e) {
+        console.error(e.message);
+        return res.status(500).json({ ok: false,message:"server error"});
+    }
+}
 module.exports.getRecipeById = async (req, res) => {
     const recipe_id = req.params.id;
     const { id } = res.payload;

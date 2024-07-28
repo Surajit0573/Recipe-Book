@@ -6,6 +6,8 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { AppContext } from "../AppContext";
 import '../Styles/SignUp.css';
 import { WindowSharp } from '@mui/icons-material';
+import { ToastContainer, Bounce, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 export default function SignUp() {
   const { isLoggedin } = useContext(AppContext);
   const navigate = useNavigate();
@@ -13,8 +15,8 @@ export default function SignUp() {
     async function fetchData() {
       const curr = await isLoggedin();
       if (curr) {
-        alert("You are logged in");
-        navigate('/');
+        toast.warn("Your already logged in");
+        return navigate('/');
       }
     }
     fetchData();
@@ -73,11 +75,11 @@ export default function SignUp() {
       const result = await response.json();
       console.log(result);
       if (!result.ok) {
-        alert(result.message);
+        toast.error(`${result.message}`);
         return;
       } else if (result.ok) {
-
-        window.location.href = '/';
+        toast.success("Registration Successful");
+        return navigate('/');
       }
     } catch (error) {
       console.error('Error:', error);

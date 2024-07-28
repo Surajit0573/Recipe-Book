@@ -9,7 +9,7 @@ export default function Home() {
     useEffect(() => {
         async function fetchData() {
             const data = await getData("", "");
-            navigate('/random', { state: data })
+            return navigate('/random', { state: data })
         }
         fetchData();
     }, []);

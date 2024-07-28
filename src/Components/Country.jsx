@@ -3,7 +3,8 @@ import axios from 'axios';
 import Card from './Card.jsx';
 import '../Styles/Recipes.css';
 import Loader from './Loader.jsx';
-
+import { ToastContainer, Bounce, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 export default function Country() {
     const [areas, setAreas] = useState([]);
     const [selectedArea, setSelectedArea] = useState(null);
@@ -17,6 +18,7 @@ export default function Country() {
             })
             .catch(error => {
                 console.error('Error fetching the areas:', error);
+                toast.error('Something went wrong !!');
             });
     }, []);
 
@@ -29,6 +31,7 @@ export default function Country() {
             })
             .catch(error => {
                 console.error('Error fetching the recipes:', error);
+                toast.error('Something went wrong !!');
             });
     };
 
@@ -70,9 +73,9 @@ export default function Country() {
         <div>
             <p className='text-3xl font-bold'>Browse Recipes By Country</p>
             <div className="flex flex-wrap p-8">
-                {areas ? areas.map(area => (
+                {areas ? areas.map((area,index) => (
                     area.strArea != "Unknown" ?
-                        <div className='group'>
+                        <div className='group' key={index}>
                             <img
                                 key={area.strArea}
                                 src={`https://flagsapi.com/${getCountryCode(area.strArea).toUpperCase()}/flat/64.png`}
@@ -90,7 +93,7 @@ export default function Country() {
                 <div>
                     <h2>Recipes from {selectedArea}</h2>
                     <div className="recipes">
-                        {recipes ? recipes.map((i) => <Card data={i} />) : <Loader />}
+                        {recipes ? recipes.map((i,index) => <Card  key={index} data={i} />) : <Loader />}
                     </div>
                 </div>
             )}

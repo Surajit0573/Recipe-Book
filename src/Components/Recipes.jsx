@@ -3,6 +3,8 @@ import Card from './Card.jsx';
 import '../Styles/Recipes.css';
 import RecipeFinder from './RecipeFinder.jsx';
 import { useState,useEffect } from "react";
+import { ToastContainer, Bounce, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 export default function Recipes({data}) {
     const [currData,setCurrData]=useState(null);
     const location = useLocation();
@@ -20,7 +22,7 @@ export default function Recipes({data}) {
         <>
         <RecipeFinder/>
         <div className="recipes">
-       {currData&&currData.map((i) =><Card data={i}/>)}
+       {currData&&currData.map((i,index) =><Card key={index} data={i}/>)}
        </div>
         </>
     )

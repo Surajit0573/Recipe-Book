@@ -7,6 +7,8 @@ import '../Styles/AddCourse.css';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { useNavigate, useLocation } from "react-router-dom";
 import { AppContext } from "../AppContext";
+import { ToastContainer, Bounce, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
     clipPath: 'inset(50%)',
@@ -30,16 +32,28 @@ export default function AddRecipe() {
         strYoutube: '',
 
     });
-    const { getUrl, deleteFile } = useContext(AppContext);
+    const { getUrl, deleteFile, isLoggedin } = useContext(AppContext);
     const [file, setFile] = useState(null);
     const [url, setUrl] = useState('');
     const [ingredients, setIngredients] = useState({});
     const [ingredient, setIngredient] = useState('');
     const [amount, setAmount] = useState('');
+
     useEffect(() => {
-        if(location.state){
-            const { strMeal, strCategory, strArea, strInstructions, strYoutube, ingredients, strMealThumb}=location.state;
-            setRecipe({ strMeal, strCategory, strArea, strInstructions, strYoutube});
+        async function fetchData() {
+            const curr = await isLoggedin();
+            if (!curr) {
+                toast.error('You must be logged in');
+                return navigate('/login');
+            }
+        }
+        fetchData();
+    }, []);
+
+    useEffect(() => {
+        if (location.state) {
+            const { strMeal, strCategory, strArea, strInstructions, strYoutube, ingredients, strMealThumb } = location.state;
+            setRecipe({ strMeal, strCategory, strArea, strInstructions, strYoutube });
             setHeading("Modify This Recipe");
             setIngredients(ingredients);
             setUrl(strMealThumb);
@@ -78,9 +92,15 @@ export default function AddRecipe() {
 
     useEffect(() => {
         async function update() {
+            try{
             const currUrl = await getUrl(file);
             console.log(currUrl);
             setUrl(currUrl);
+            toast.success('Thumbnail updated successfully');
+            }catch(error){
+                console.log(error);
+                toast.error('Failed to upload image');
+            }
         }
         if (file != null) {
             update();
@@ -89,11 +109,11 @@ export default function AddRecipe() {
 
     function addIngredient(e) {
         e.preventDefault();
-        const index=Object.keys(ingredients).length/2+1;
-        const a="strIngredient"+index;
-        const b="strMeasure"+index;
+        const index = Object.keys(ingredients).length / 2 + 1;
+        const a = "strIngredient" + index;
+        const b = "strMeasure" + index;
         if (ingredient.trim().length !== 0) {
-            setIngredients({...ingredients,[a]:ingredient.trim(),[b]:amount.trim()});
+            setIngredients({ ...ingredients, [a]: ingredient.trim(), [b]: amount.trim() });
             setIngredient('');
             setAmount('');
         }
@@ -119,7 +139,7 @@ export default function AddRecipe() {
     }
     async function handleSubmit(e) {
         e.preventDefault();
-        console.log( recipe,ingredients,url);
+        console.log(recipe, ingredients, url);
         try {
             // Send the POST request with the file
             const response = await fetch('http://localhost:3000/api/recipe/', {
@@ -129,26 +149,29 @@ export default function AddRecipe() {
                 },
                 credentials: "include",
                 withCredentials: true,
-                body: JSON.stringify({...recipe,ingredients,strMealThumb:url})
+                body: JSON.stringify({ ...recipe, ingredients, strMealThumb: url })
             });
             const result = await response.json();
             console.log(result);
             if (result.ok) {
                 console.log(result);
-                navigate('/myrecipes');
+                toast.success(`${result.message}`);
+                return navigate('/myrecipes');
             } else {
-                if(result.redirect) {
-                    alert(result.massage);
-                    navigate(result.redirect);
+                if (result.redirect) {
+                    toast.error(`${result.message}`);
+                    return navigate(result.redirect);
                 }
-                alert("Something went wrong. Please try again !!");
+                toast.error('Something went wrong');
             }
         } catch (error) {
             console.error('Error uploading file:', error);
+            toast.error('Something went wrong');
         }
     }
     return (
         <>
+            {/* <ToastContainer /> */}
             <div className="addCourse">
                 <h1 className="text-3xl m-4">{heading}</h1>
                 <div className="addCourseForm">
@@ -204,7 +227,7 @@ export default function AddRecipe() {
                     </div>
 
                     <TextField id="outlined-multiline-static" name="strInstructions" value={recipe.strInstructions} onChange={handleChange} label="Add Your Detailed Instructions Here" multiline rows={5} sx={styles} className='inputtext' required />
-                    <Button type='submit' onClick={handleSubmit} disabled={!((url != '') && (ingredients!=null))} variant="contained" size="medium">SAVE</Button>
+                    <Button type='submit' onClick={handleSubmit} disabled={!((url != '') && (ingredients != null))} variant="contained" size="medium">SAVE</Button>
                 </div>
             </div>
         </>

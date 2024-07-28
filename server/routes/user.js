@@ -12,6 +12,7 @@ router.post("/login",asyncWrap(userContoller.login));
 router.get("/logout", varifyJWT,userContoller.logout);
 router.post('/like/:id',varifyJWT,asyncWrap(userContoller.like));
 router.get('/like',varifyJWT,asyncWrap(userContoller.getlike));
+router.get('/:id',asyncWrap(userContoller.getName));
 // router.route("/changePass")
 // .get(varifyJWT,asyncWrap(userContoller.changePass))
 // .post(varifyJWT,asyncWrap(userContoller.updatePass))

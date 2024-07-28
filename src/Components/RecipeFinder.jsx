@@ -2,6 +2,8 @@ import { NavLink,useNavigate } from 'react-router-dom';
 import '../Styles/RecipeFinder.css';
 import { useState,useContext, useEffect} from 'react';
 import { AppContext } from "../AppContext";
+import { ToastContainer, Bounce, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 // import useApi from '../useApi';
 export default function RecipeFinder() {
     const [value, setValue] = useState("c");
@@ -11,14 +13,22 @@ export default function RecipeFinder() {
     async function searchRandomRecipe() {
         setText("");
         setValue("");
-        const data = await getData(text,value);
-        navigate('/random',{state:data})
+        try{
+        const data = await getData("","");
+       return  navigate('/random',{state:data});
+        }catch(error){
+            toast.error('Something went wrong');
+        }
     }
 
     async function performSearch(){
         console.log("text : ",text,"value : ",value);
+        try{
         const data = await getData(text,value);
-        navigate('/recipes',{state:data})
+        return navigate('/recipes',{state:data});
+        }catch(error){
+            toast.error('Something went wrong');
+        }
     }
 
     

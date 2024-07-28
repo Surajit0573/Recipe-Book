@@ -3,6 +3,8 @@ import { useLocation } from "react-router-dom";
 import Card from './Card.jsx';
 import '../Styles/Recipes.css';
 import Loader from "./Loader.jsx";
+import { ToastContainer, Bounce, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 export default function OneIngredient() {
     const location = useLocation();
     const [data, setData] = useState();
@@ -17,12 +19,16 @@ export default function OneIngredient() {
 
     useEffect(() => {
         async function fetchData() {
+            try{
             const currIngd = transformString(data.strIngredient);
             const url="https://www.themealdb.com/api/json/v1/1/filter.php?i="+currIngd;
             const response = await fetch(url);
             const result = await response.json();
             console.log(result);
             setRecipes(result.meals);
+            }catch(error){
+                toast.error('Something went wrong');
+            }
         };
         if (data)
             fetchData();
@@ -37,7 +43,7 @@ export default function OneIngredient() {
         </div>
         <p className="text-3xl font-semibold">Populer Recipes Using {data && data.strIngredient}</p>
         <div className="recipes">
-            {recipes?recipes.map((i) => <Card data={i} />):<Loader/>}
+            {recipes?recipes.map((i,index) => <Card key={index} data={i} />):<Loader/>}
         </div>
 
     </>);

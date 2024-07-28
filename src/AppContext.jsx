@@ -1,7 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 import axios from 'axios';
 export const AppContext = createContext();
-
 export default function AppContextProvider({ children }) {
 
     function convertToUnderscore(str) {
@@ -9,6 +8,7 @@ export default function AppContextProvider({ children }) {
     }
 
     async function getData(text,value){
+       console.log(text,value);
         const currText = convertToUnderscore(text);
         let Url = 'https://www.themealdb.com/api/json/v1/1/';
         if (value && value.length > 0) {

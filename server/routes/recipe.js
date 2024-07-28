@@ -10,7 +10,8 @@ router.route('/')
 .get(varifyJWT,asyncWrap(recipeContoller.getRecipe));
 
 router.route('/:id')
-.get(varifyJWT,asyncWrap(recipeContoller.getRecipeById));
+.get(varifyJWT,asyncWrap(recipeContoller.getRecipeById))
+.delete(varifyJWT,asyncWrap(recipeContoller.deleteRecipe));
 
 router.get('/:value/:text',asyncWrap(recipeContoller.filterRecipe));
 

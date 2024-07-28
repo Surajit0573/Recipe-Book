@@ -11,7 +11,7 @@ export default function Random() {
     return (
         <>
         <RecipeFinder/>
-        {data&&<OneRecipe data={data.meals[0]}/>}
+        {data&&data.meals&&<OneRecipe data={data.meals[0]}/>}
         </>
     )
 }

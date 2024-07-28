@@ -54,6 +54,18 @@ const options = {
 //     }
 // }
 
+module.exports.getName = async (req, res) => {
+    const { id } = req.params;
+    const user = await User.findById(id);
+    if (!user) {
+        console.error("User not found");
+        return res.status(404).json({ ok: false, message: "User not found" });
+    }
+    return res.json({ ok: true, message: "User is Logged In", data: user.username});
+}
+
+
+
 module.exports.getlike = async (req, res) => {
     let { id } = res.payload;
     if (!id) {
@@ -91,7 +103,7 @@ module.exports.like = async (req, res) => {
     }
     console.log(user);
     await user.save();
-    return res.json({ ok: true, message: "Modified Liked",data: user.fevRecipes });
+    return res.json({ ok: true, message: "Modified Liked", data: user.fevRecipes });
 }
 
 
@@ -101,12 +113,12 @@ module.exports.isLoggedin = async (req, res) => {
         console.error("User not logged in");
         return res.status(401).json({ ok: false, message: "User not logged in" });
     }
-    const user =await User.findById(id);
+    const user = await User.findById(id);
     if (!user) {
         console.error("User not found");
         return res.status(404).json({ ok: false, message: "User not found" });
     }
-    return res.json({ ok: true, message: "User is Logged In" });
+    return res.json({ ok: true, message: "User is Logged In",data:user.username });
 }
 
 
@@ -234,7 +246,7 @@ module.exports.login = async (req, res) => {
 
 module.exports.logout = (req, res) => {
     res.clearCookie("token", options);
-    res.status(201).json({ status: 200, massege: "Successfully logged out", ok: true, });
+    res.status(201).json({ status: 200, message: "Successfully logged out", ok: true, });
 
 };
 
