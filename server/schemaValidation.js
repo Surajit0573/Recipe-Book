@@ -7,13 +7,12 @@ module.exports.userSchema = Joi.object({
 
 });
 
-// module.exports.profileSchema = Joi.object({
-//   fullname: Joi.string().required(),
-//   about: Joi.string().required(),
-//   dp: Joi.string().required(),
-//   links: Joi.object({
-//   website: Joi.string().required(),
-//   twitter: Joi.string().required(),
-//   linkedin: Joi.string().required(),}),
-//   skills: Joi.array().items(Joi.string()).required(),
-// });
+module.exports.recipeSchema = Joi.object({
+  strMeal: Joi.string().required(),
+  strCategory: Joi.string().required(),
+  strArea: Joi.string().required(),
+  strInstructions: Joi.string().required(),
+  strMealThumb: Joi.string().required(),
+  ingredients:Joi.object().required(),
+  strYoutube: Joi.string(),
+});

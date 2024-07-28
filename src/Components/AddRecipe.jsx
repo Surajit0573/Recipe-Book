@@ -19,6 +19,7 @@ const VisuallyHiddenInput = styled('input')({
     width: 1,
 });
 export default function AddRecipe() {
+    const location = useLocation();
     const navigate = useNavigate();
     const [heading, setHeading] = useState("Create Your Recipe");
     const [recipe, setRecipe] = useState({
@@ -35,29 +36,15 @@ export default function AddRecipe() {
     const [ingredients, setIngredients] = useState({});
     const [ingredient, setIngredient] = useState('');
     const [amount, setAmount] = useState('');
-    // useEffect(() => {
-    //     async function fetchData() {
-    //         const response = await fetch('http://localhost:3000/api/user/recipe', {
-    //             method: 'GET',
-    //             credentials: "include",
-    //             withCredentials: true,
-    //         });
-    //         const result = await response.json();
-    //         if (result.ok) {
-    //             console.log(result);
-    //             setRecipe({
-    //                 fullname: result.data.fullname,
-    //                 about: result.data.about
-    //             })
-    //             setIngredients(result.data.ingredients);
-    //             setUrl(result.data.dp);
-    //             setHeading("Modify This Recipe");
-    //         } else {
-    //             console.log(result.message);
-    //         }
-    //     }
-    //     fetchData();
-    // }, [])
+    useEffect(() => {
+        if(location.state){
+            const { strMeal, strCategory, strArea, strInstructions, strYoutube, ingredients, strMealThumb}=location.state;
+            setRecipe({ strMeal, strCategory, strArea, strInstructions, strYoutube});
+            setHeading("Modify This Recipe");
+            setIngredients(ingredients);
+            setUrl(strMealThumb);
+        }
+    }, [location.state])
 
     const styles =
     {
@@ -114,8 +101,11 @@ export default function AddRecipe() {
     }
 
     function deleteIngredient(e) {
-        console.log(e.target.getAttribute('name'));
-        setIngredients(ingredients.filter((t) => t != e.target.getAttribute('name')));
+        const name = e.target.getAttribute('name');
+        const updatedIngredients = { ...ingredients };
+        delete updatedIngredients[name];
+        delete updatedIngredients[name.replace('strIngredient', 'strMeasure')];
+        setIngredients(updatedIngredients);
     }
 
     function handleChange(e) {
@@ -129,25 +119,30 @@ export default function AddRecipe() {
     }
     async function handleSubmit(e) {
         e.preventDefault();
-        // console.log( recipe, links, ingredients,url);
+        console.log( recipe,ingredients,url);
         try {
             // Send the POST request with the file
-            // const response = await fetch('http://localhost:3000/api/user/recipe/', {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/json',
-            //     },
-            //     credentials: "include",
-            //     withCredentials: true,
-            //     body: JSON.stringify({ fullname: recipe.fullname, about: recipe.about, links, ingredients, dp: url })
-            // });
-            // const result = await response.json();
-            // console.log(result);
-            // if (result.ok) {
-            //     navigate('/recipe');
-            // } else {
-            //     alert("Something went wrong. Please try again !!");
-            // }
+            const response = await fetch('http://localhost:3000/api/recipe/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: "include",
+                withCredentials: true,
+                body: JSON.stringify({...recipe,ingredients,strMealThumb:url})
+            });
+            const result = await response.json();
+            console.log(result);
+            if (result.ok) {
+                console.log(result);
+                navigate('/myrecipes');
+            } else {
+                if(result.redirect) {
+                    alert(result.massage);
+                    navigate(result.redirect);
+                }
+                alert("Something went wrong. Please try again !!");
+            }
         } catch (error) {
             console.error('Error uploading file:', error);
         }
@@ -160,6 +155,7 @@ export default function AddRecipe() {
                     <TextField id="outlined-basic" name="strMeal" value={recipe.strMeal} onChange={handleChange} label='Name' variant="outlined" sx={styles} className='inputtext' required />
                     <TextField id="outlined-basic" name="strCategory" value={recipe.strCategory} onChange={handleChange} label='Category' variant="outlined" sx={styles} className='inputtext' required />
                     <TextField id="outlined-basic" name="strArea" value={recipe.strArea} onChange={handleChange} label='Area' variant="outlined" sx={styles} className='inputtext' required />
+                    <TextField id="outlined-basic" name="strYoutube" value={recipe.strYoutube} onChange={handleChange} label='Video Link' variant="outlined" sx={styles} className='inputtext' />
                     <div className='upload w-[535px]'>
                         <img src={url}></img>
                         <Button
@@ -183,12 +179,32 @@ export default function AddRecipe() {
                         <TextField id="outlined-basic" value={amount} onChange={(e) => setAmount(e.target.value)} label='Add Amount' variant="outlined" sx={styles} className='inputtext' />
                         <Button type='submit' onClick={addIngredient} disabled={!((amount != '') && (ingredient != ''))} variant="contained" size="medium">ADD</Button>
                     </div>
-                    {/* <div className="showTags">
-                        {ingredients.map((t, index) => (<div key={index} className="oneTag">{t}<button name={t} onClick={deleteIngredient}><i name={t} className="fa-solid fa-xmark flex self-center"></i></button></div>))}
-                    </div> */}
+                    <div className='ingredients-list'>
+                        {Object.keys(ingredients).map((key, index) => {
+                            if (key.startsWith("strIngredient")) {
+                                const measureKey = key.replace("strIngredient", "strMeasure");
+                                return (
+                                    <div key={index} className='flex justify-between  items-center mb-4 bg-[#006769] py-2 px-4 rounded-md w-96'>
+                                        <span className='text-md font-semibold'>{ingredients[key]} - {ingredients[measureKey]}</span>
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            name={key}
+                                            onClick={deleteIngredient}
+                                            size="small"
+                                            className="delete-button"
+                                        >
+                                            Delete
+                                        </Button>
+                                    </div>
+                                );
+                            }
+                            return null;
+                        })}
+                    </div>
 
                     <TextField id="outlined-multiline-static" name="strInstructions" value={recipe.strInstructions} onChange={handleChange} label="Add Your Detailed Instructions Here" multiline rows={5} sx={styles} className='inputtext' required />
-                    <Button type='submit' onClick={handleSubmit} disabled={!((url != '') && (ingredients.length > 0))} variant="contained" size="medium">SAVE</Button>
+                    <Button type='submit' onClick={handleSubmit} disabled={!((url != '') && (ingredients!=null))} variant="contained" size="medium">SAVE</Button>
                 </div>
             </div>
         </>

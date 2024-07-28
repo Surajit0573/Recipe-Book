@@ -10,6 +10,8 @@ router.get('/',varifyJWT,asyncWrap(userContoller.isLoggedin));
 router.post("/signup",validateuser, asyncWrap(userContoller.signup));
 router.post("/login",asyncWrap(userContoller.login));
 router.get("/logout", varifyJWT,userContoller.logout);
+router.post('/like/:id',varifyJWT,asyncWrap(userContoller.like));
+router.get('/like',varifyJWT,asyncWrap(userContoller.getlike));
 // router.route("/changePass")
 // .get(varifyJWT,asyncWrap(userContoller.changePass))
 // .post(varifyJWT,asyncWrap(userContoller.updatePass))

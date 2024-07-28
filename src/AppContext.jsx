@@ -4,20 +4,37 @@ export const AppContext = createContext();
 
 export default function AppContextProvider({ children }) {
 
+    function convertToUnderscore(str) {
+        return str.split(' ').join('_');
+    }
+
     async function getData(text,value){
+        const currText = convertToUnderscore(text);
         let Url = 'https://www.themealdb.com/api/json/v1/1/';
         if (value && value.length > 0) {
             if (value == "name") {
-                Url = Url + `search.php?s=${text}`;
+                Url = Url + `search.php?s=${currText}`;
             } else {
-                Url = Url + `filter.php?${value}=${text}`;
+                Url = Url + `filter.php?${value}=${currText}`;
             }
         } else {
             Url = Url + `random.php`;
         }
         console.log(Url);
         const response = await fetch(Url);
-        return await response.json();
+        let data=await response.json();
+        
+        if (value && value.length > 0) {
+            const setResponse=await fetch(`http://localhost:3000/api/recipe/${value}/${currText}`);
+            const recipes=await setResponse.json();
+            console.log("Im here now from  DB",recipes);
+            if(data&&data.meals){
+            data.meals=[...data.meals,...recipes.data];
+            }else{
+                data.meals=recipes.data;
+            }
+        }
+        return data;
     }
 
 
@@ -34,6 +51,21 @@ export default function AppContextProvider({ children }) {
         const result = await response.json();
         return result.ok;
     }
+
+    async function isLiked() {
+        const response = await fetch('http://localhost:3000/api/user/like', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: "include",
+            withCredentials: true,
+        });
+        const result = await response.json();
+        console.log("Here : ",result);
+        return result.data||[];
+    }
+
 
     function getFileType(mimeType) {
         if (typeof mimeType !== 'string') {
@@ -86,7 +118,7 @@ export default function AppContextProvider({ children }) {
         }
     }
 
-    const value = { getUrl, deleteFile, isLoggedin,getData };
+    const value = { getUrl, deleteFile, isLoggedin,getData,isLiked };
     return (
         <AppContext.Provider value={value}>
             {children}

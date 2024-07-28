@@ -14,7 +14,7 @@ export default function Recipes({data}) {
                 setCurrData(location.state.meals);
             }
         }
-    },[data])
+    },[data,location.state.meals])
 
     return (
         <>

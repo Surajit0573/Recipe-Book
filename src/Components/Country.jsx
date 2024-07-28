@@ -70,23 +70,27 @@ export default function Country() {
         <div>
             <p className='text-3xl font-bold'>Browse Recipes By Country</p>
             <div className="flex flex-wrap p-8">
-                {areas?areas.map(area => (
+                {areas ? areas.map(area => (
                     area.strArea != "Unknown" ?
-                        <img
-                            key={area.strArea}
-                            src={`https://flagsapi.com/${getCountryCode(area.strArea).toUpperCase()}/flat/64.png`}
-                            alt={area.strArea}
-                            onClick={() => clickHandler(area.strArea)}
-                            style={{ cursor: 'pointer', margin: '5px' }}
-                        />
+                        <div className='group'>
+                            <img
+                                key={area.strArea}
+                                src={`https://flagsapi.com/${getCountryCode(area.strArea).toUpperCase()}/flat/64.png`}
+                                alt={area.strArea}
+                                onClick={() => clickHandler(area.strArea)}
+                                style={{ cursor: 'pointer', margin: '5px' }}
+                            /> <div className="opacity-0 bg-black text-white text-xs rounded px-2 py-1 group-hover:opacity-100 transition-opacity duration-300">
+                                {area.strArea}
+                            </div>
+                        </div>
                         : null
-                )):<Loader/>}
+                )) : <Loader />}
             </div>
             {selectedArea && (
                 <div>
                     <h2>Recipes from {selectedArea}</h2>
                     <div className="recipes">
-                        {recipes?recipes.map((i) => <Card data={i} />):<Loader/>}
+                        {recipes ? recipes.map((i) => <Card data={i} />) : <Loader />}
                     </div>
                 </div>
             )}

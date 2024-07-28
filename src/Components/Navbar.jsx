@@ -46,7 +46,7 @@ export default function Navbar(){
         <NavLink to={'/country'} className="text-white"><p className="h2">Browse Country</p></NavLink>
         </div>
         <div className='flex items-center'>
-             <i className="fa-solid fa-heart text-red-600 text-2xl"></i>
+             <NavLink to={'/myRecipes#LikedRecipes'}><i className="fa-solid fa-heart text-red-600 text-2xl"></i></NavLink>
             {isLog?<button className="w-fit mx-4" onClick={handleLogout}>LogOut</button>:<NavLink to={"/login"}><button className="w-fit mx-4">Login</button></NavLink>}
 
         </div>

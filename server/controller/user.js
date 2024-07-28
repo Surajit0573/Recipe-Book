@@ -54,6 +54,46 @@ const options = {
 //     }
 // }
 
+module.exports.getlike = async (req, res) => {
+    let { id } = res.payload;
+    if (!id) {
+        console.error("User not logged in");
+        return res.status(401).json({ ok: false, message: "User not logged in" });
+    }
+    const user = await User.findById(id);
+    if (!user) {
+        console.error("User not found");
+        return res.status(404).json({ ok: false, message: "User not found" });
+    }
+    return res.json({ ok: true, message: "Fetched Like", data: user.fevRecipes });
+}
+
+module.exports.like = async (req, res) => {
+    let like_id = req.params.id;
+    let { id } = res.payload;
+    if (!id) {
+        console.error("User not logged in");
+        return res.status(401).json({ ok: false, message: "User not logged in" });
+    }
+    let user = await User.findById(id);
+    if (!user) {
+        console.error("User not found");
+        return res.status(404).json({ ok: false, message: "User not found" });
+    }
+    if (user.fevRecipes) {
+        if (user.fevRecipes.includes(like_id)) {
+            user.fevRecipes = user.fevRecipes.filter(item => item !== like_id);
+        } else {
+            user.fevRecipes.push(like_id);
+        }
+    } else {
+        user.fevRecipes = [like_id];
+    }
+    console.log(user);
+    await user.save();
+    return res.json({ ok: true, message: "Modified Liked",data: user.fevRecipes });
+}
+
 
 module.exports.isLoggedin = async (req, res) => {
     let { id } = res.payload;
@@ -61,7 +101,7 @@ module.exports.isLoggedin = async (req, res) => {
         console.error("User not logged in");
         return res.status(401).json({ ok: false, message: "User not logged in" });
     }
-    const user = User.findById(id);
+    const user =await User.findById(id);
     if (!user) {
         console.error("User not found");
         return res.status(404).json({ ok: false, message: "User not found" });
@@ -198,21 +238,21 @@ module.exports.logout = (req, res) => {
 
 };
 
-module.exports.changePass = async (req, res) => {
-    const { id } = res.payload;
-    try {
-        const user = await User.findById(id);
-        if (!user) {
-            console.error("User not found");
-            return res.status(404).json({ ok: false, message: "User not found", data: null });
-        }
-        return res.status(200).json({ ok: true, message: "successfully found user", data: user.username });
-    } catch (e) {
-        console.error(e.message);
-        return res.status(500).json({ ok: false, message: "Something went wrong" });
-    }
+// module.exports.changePass = async (req, res) => {
+//     const { id } = res.payload;
+//     try {
+//         const user = await User.findById(id);
+//         if (!user) {
+//             console.error("User not found");
+//             return res.status(404).json({ ok: false, message: "User not found", data: null });
+//         }
+//         return res.status(200).json({ ok: true, message: "successfully found user", data: user.username });
+//     } catch (e) {
+//         console.error(e.message);
+//         return res.status(500).json({ ok: false, message: "Something went wrong" });
+//     }
 
-};
+// };
 
 
 // module.exports.updatePass = async (req, res) => {

@@ -48,7 +48,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/upload",upload);
 app.use("/api/user",users);
-// app.use("/api/recipe",recipe);
+app.use("/api/recipe",recipe);
 
 
 //Wrong Path

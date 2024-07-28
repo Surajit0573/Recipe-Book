@@ -4,13 +4,11 @@ import { useState,useContext, useEffect} from 'react';
 import { AppContext } from "../AppContext";
 // import useApi from '../useApi';
 export default function RecipeFinder() {
-    const [head,setHead]=useState("Recipe Of The Day");
-    const [value, setValue] = useState("");
+    const [value, setValue] = useState("c");
     const [text, setText] = useState("");
     const { getData } = useContext(AppContext);
     const navigate=useNavigate();
     async function searchRandomRecipe() {
-        setHead("");
         setText("");
         setValue("");
         const data = await getData(text,value);
@@ -18,7 +16,7 @@ export default function RecipeFinder() {
     }
 
     async function performSearch(){
-        setHead("");
+        console.log("text : ",text,"value : ",value);
         const data = await getData(text,value);
         navigate('/recipes',{state:data})
     }
@@ -26,7 +24,7 @@ export default function RecipeFinder() {
     
     return(
         <div className="container">
-        <h1>Welcome to Recipe Finder</h1>
+        <p className='text-4xl font-semibold'>Welcome to Recipe Finder</p>
         <div className="search-container">
             <input type="text" id="searchInput" placeholder="Search..." onChange={(event)=>{setText(event.target.value)}}/>
             <select id="searchBy" onChange={(event)=>{setValue(event.target.value)}}>
@@ -38,7 +36,7 @@ export default function RecipeFinder() {
             <button onClick={performSearch}>Search</button>
         </div>
         <button onClick={searchRandomRecipe} className='randomBtn'>A Random Recipe</button>
-        <h2 style={{color:'violet'}}>{head}</h2>
+        <h2 className='text-violet-500 text-2xl font-semibold mt-4'>Detailed Recipe</h2>
     </div>
     )
 }
