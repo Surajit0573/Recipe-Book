@@ -15,7 +15,7 @@ export default function OneRecipe({ data }) {
     useEffect(() => {
         async function fetchData() {
             try {
-                const response = await fetch('http://localhost:3000/api/user/', {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/user/`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -41,7 +41,7 @@ export default function OneRecipe({ data }) {
         async function fetchData() {
             if (data && data.user) {
                 try {
-                    const response = await fetch(`http://localhost:3000/api/user/${data.user}`);
+                    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/user/${data.user}`);
                     const user = await response.json();
                     setUser(user.data);
                 } catch (error) {
@@ -78,7 +78,7 @@ export default function OneRecipe({ data }) {
         const id = data._id;
         try {
             // Send the DELETE request
-            const response = await fetch(`http://localhost:3000/api/recipe/${id}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/recipe/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -109,7 +109,7 @@ export default function OneRecipe({ data }) {
         const id = data && (data._id || data.idMeal);
         try {
             // Send the POST request with the file
-            const response = await fetch(`http://localhost:3000/api/user/like/${id}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/user/like/${id}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

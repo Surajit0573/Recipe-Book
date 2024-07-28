@@ -1,10 +1,11 @@
 import logo from '../assets/logo.png';
 import { useState, useEffect, useContext } from 'react';
 import { AppContext } from '../AppContext';
-import { useNavigate, NavLink } from 'react-router-dom';
+import { useNavigate, NavLink,useLocation } from 'react-router-dom';
 import { ToastContainer, Bounce, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 export default function Navbar() {
+  const location = useLocation();
   const navigate = useNavigate();
   const [isLog, setIsLog] = useState(false);
   const { isLoggedin } = useContext(AppContext);
@@ -19,12 +20,12 @@ export default function Navbar() {
       }
     }
     fetchData();
-  }, []);
+  }, [location]);
 
   const handleLogout = async () => {
     // Handle user logout
     try {
-      const response = await fetch('http://localhost:3000/api/user/logout', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/user/logout`, {
         credentials: "include",
         withCredentials: true,
       });

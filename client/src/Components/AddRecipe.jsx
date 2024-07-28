@@ -142,7 +142,7 @@ export default function AddRecipe() {
         console.log(recipe, ingredients, url);
         try {
             // Send the POST request with the file
-            const response = await fetch('http://localhost:3000/api/recipe/', {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/recipe/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

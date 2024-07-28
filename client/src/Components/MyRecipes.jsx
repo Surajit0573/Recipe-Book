@@ -23,7 +23,7 @@ export default function MyRecipes() {
                 const temp = await isLiked();
                 setFev(temp);
                 // Send the POST request with the file
-                const response = await fetch('http://localhost:3000/api/recipe/', {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/recipe/`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -48,7 +48,7 @@ export default function MyRecipes() {
                 const fevDataPromises = temp.map(async id => {
                     console.log("ID : " + id);
                     if (isMongoDBObjectId(id)) {
-                        const res = await fetch(`http://localhost:3000/api/recipe/${id}`, {
+                        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/recipe/${id}`, {
                             method: 'GET',
                             headers: {
                                 'Content-Type': 'application/json',

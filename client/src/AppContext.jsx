@@ -25,7 +25,7 @@ export default function AppContextProvider({ children }) {
         let data=await response.json();
         
         if (value && value.length > 0) {
-            const setResponse=await fetch(`http://localhost:3000/api/recipe/${value}/${currText}`);
+            const setResponse=await fetch(`${import.meta.env.VITE_API_URL}/api/recipe/${value}/${currText}`);
             const recipes=await setResponse.json();
             console.log("Im here now from  DB",recipes);
             if(data&&data.meals){
@@ -40,7 +40,7 @@ export default function AppContextProvider({ children }) {
 
 
     async function isLoggedin() {
-        const response = await fetch('http://localhost:3000/api/user/', {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/user/`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -53,7 +53,7 @@ export default function AppContextProvider({ children }) {
     }
 
     async function isLiked() {
-        const response = await fetch('http://localhost:3000/api/user/like', {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/user/like`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -81,7 +81,7 @@ export default function AppContextProvider({ children }) {
             return null;
         }
         const type = getFileType(file.type);
-        const API = type == "video" ? 'http://localhost:3000/api/upload/video' : 'http://localhost:3000/api/upload/';
+        const API = type == "video" ? `${import.meta.env.VITE_API_URL}/api/upload/video` : `${import.meta.env.VITE_API_URL}/api/upload/`;
         try {
             // Send the POST request with the file
             const response = await axios.post(API, { file }, {
@@ -109,7 +109,7 @@ export default function AppContextProvider({ children }) {
             console.log("Details: ", url, urlSegments, lastTwoSegments, publicId, type);
             try {
                 // Send the POST request with the file
-                const response = await axios.post('http://localhost:3000/api/upload/delete', { publicId, type });
+                const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/upload/delete`, { publicId, type });
                 console.log(response);
 
             } catch (error) {
