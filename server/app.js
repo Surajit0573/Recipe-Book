@@ -12,8 +12,7 @@ const recipe = require("./routes/recipe.js");
 const upload= require("./routes/upload.js");
 const app = express();
 app.use(cors({
-  credentials: true,
-  origin: 'http://localhost:5173',
+  credentials: true
 }));
 let port = 3000;
 var methodOverride = require('method-override')
