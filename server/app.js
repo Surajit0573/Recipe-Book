@@ -13,7 +13,7 @@ const upload= require("./routes/upload.js");
 const app = express();
 app.use(cors({
   credentials: true,
-  origin: ['http://localhost:5173',`${process.env.CLIENT_URL}/`]
+  origin: ['http://localhost:5173',process.env.CLIENT_URL]
 }));
 let port = 3000;
 var methodOverride = require('method-override')
